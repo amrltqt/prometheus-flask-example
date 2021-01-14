@@ -1,0 +1,28 @@
+version: '3'
+services:
+  app:
+    build: server/.
+    ports:
+      - '5000:5000'
+
+  prometheus:
+    build: prometheus/.
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus_data:/prometheus
+
+  graphana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=pass
+    depends_on: 
+      - prometheus
+    ports: 
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  prometheus_data:
+  grafana_data:
